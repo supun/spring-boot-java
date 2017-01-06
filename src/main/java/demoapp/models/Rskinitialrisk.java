@@ -12,6 +12,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -22,153 +23,167 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
  * @author supun
  */
 @Entity
 @Table(name = "rskinitialrisk")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Rskinitialrisk.findAll", query = "SELECT r FROM Rskinitialrisk r")
-    , @NamedQuery(name = "Rskinitialrisk.findById", query = "SELECT r FROM Rskinitialrisk r WHERE r.rskinitialriskPK.id = :id")
-    , @NamedQuery(name = "Rskinitialrisk.findByVslcode", query = "SELECT r FROM Rskinitialrisk r WHERE r.rskinitialriskPK.vslcode = :vslcode")
-    , @NamedQuery(name = "Rskinitialrisk.findByHazardno", query = "SELECT r FROM Rskinitialrisk r WHERE r.rskinitialriskPK.hazardno = :hazardno")
-    , @NamedQuery(name = "Rskinitialrisk.findByActivity", query = "SELECT r FROM Rskinitialrisk r WHERE r.activity = :activity")
-    , @NamedQuery(name = "Rskinitialrisk.findByHazardcode", query = "SELECT r FROM Rskinitialrisk r WHERE r.hazardcode = :hazardcode")
-    , @NamedQuery(name = "Rskinitialrisk.findByEffhazardcode", query = "SELECT r FROM Rskinitialrisk r WHERE r.effhazardcode = :effhazardcode")})
-public class Rskinitialrisk implements Serializable {
+@NamedQueries({ @NamedQuery(name = "Rskinitialrisk.findAll", query = "SELECT r FROM Rskinitialrisk r"), @NamedQuery(name = "Rskinitialrisk.findById", query = "SELECT r FROM Rskinitialrisk r WHERE r.rskinitialriskPK.id = :id"),
+		@NamedQuery(name = "Rskinitialrisk.findByVslcode", query = "SELECT r FROM Rskinitialrisk r WHERE r.rskinitialriskPK.vslcode = :vslcode"), @NamedQuery(name = "Rskinitialrisk.findByHazardno", query = "SELECT r FROM Rskinitialrisk r WHERE r.rskinitialriskPK.hazardno = :hazardno"),
+		@NamedQuery(name = "Rskinitialrisk.findByActivity", query = "SELECT r FROM Rskinitialrisk r WHERE r.activity = :activity"), @NamedQuery(name = "Rskinitialrisk.findByHazardcode", query = "SELECT r FROM Rskinitialrisk r WHERE r.hazardcode = :hazardcode"),
+		@NamedQuery(name = "Rskinitialrisk.findByEffhazardcode", query = "SELECT r FROM Rskinitialrisk r WHERE r.effhazardcode = :effhazardcode") })
+public class Rskinitialrisk implements Serializable
+{
 
-    private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected RskinitialriskPK rskinitialriskPK;
-    @Column(name = "activity")
-    private String activity;
-    @Column(name = "hazardcode")
-    private String hazardcode;
-    @Column(name = "effhazardcode")
-    private String effhazardcode;
+	private static final long serialVersionUID = 1L;
+	@EmbeddedId
+	protected RskinitialriskPK rskinitialriskPK;
+	@Column(name = "activity")
+	private String activity;
+	@Column(name = "hazardcode")
+	private String hazardcode;
+	@Column(name = "effhazardcode")
+	private String effhazardcode;
 
-	@OneToMany(mappedBy = "rskinitialrisk")
-	private List<Rskriskcontrol> rskriskcontrolList;
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "rskinitialrisk")
-	private List<Rskriskcontrol> rskriskcontrolList1;
-
-	@OneToMany(mappedBy = "rskinitialrisk")
-	private List<Rskriskcontrol> rskriskcontrolList2;
-
-	// @OneToMany(mappedBy = "rskinitialrisk", cascade = CascadeType.ALL)
+	// @OneToMany(mappedBy = "rskinitialrisk")
 	// private List<Rskriskcontrol> rskriskcontrolList;
 
-    @JoinColumn(name = "rskid", referencedColumnName = "rskid")
-	@ManyToOne
-    private Rskmaster rskid;
+	// @OneToMany(cascade = CascadeType.ALL, mappedBy = "rskinitialrisk")
+	// private List<Rskriskcontrol> rskriskcontrolList1;
 
-    public Rskinitialrisk() {
-    }
+	// @OneToMany(mappedBy = "rskinitialrisk")
+	// private List<Rskriskcontrol> rskriskcontrolList2;
 
-    public Rskinitialrisk(RskinitialriskPK rskinitialriskPK) {
-        this.rskinitialriskPK = rskinitialriskPK;
-    }
+	@OneToMany(mappedBy = "rskinitialrisk", cascade = CascadeType.ALL)
+	private List<Rskriskcontrol> rskriskcontrolList;
 
-    public Rskinitialrisk(int id, String vslcode, String hazardno) {
-        this.rskinitialriskPK = new RskinitialriskPK(id, vslcode, hazardno);
-    }
+	/*
+	 * @OneToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	 * @JoinColumn(name="cid", referencedColumnName = "id")
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "rskid", referencedColumnName = "rskid", nullable = false, updatable = false, insertable = true)
+	private Rskmaster rskid;
 
-    public RskinitialriskPK getRskinitialriskPK() {
-        return rskinitialriskPK;
-    }
+	/*
+	 * @ManyToOne(fetch = FetchType.LAZY)
+	 * @JoinColumn(name = "tastockid", nullable = false, updatable = false, insertable = true) private TaStock taStock;
+	 */
+	/*
+	 * @JoinColumns({ @JoinColumn(name = "PROFILE_ID", referencedColumnName = "PROFILE_ID", insertable = false, updatable = false), @JoinColumn(name =
+	 * "ITEM_NO", referencedColumnName = "ITEM_NO", insertable = false, updatable = false) })
+	 * @ManyToOne(optional = false, fetch = FetchType.LAZY) private CmsContentItem cmsContentItem;
+	 */
+	public Rskinitialrisk()
+	{
+	}
 
-    public void setRskinitialriskPK(RskinitialriskPK rskinitialriskPK) {
-        this.rskinitialriskPK = rskinitialriskPK;
-    }
+	public Rskinitialrisk( RskinitialriskPK rskinitialriskPK )
+	{
+		this.rskinitialriskPK = rskinitialriskPK;
+	}
 
-    public String getActivity() {
-        return activity;
-    }
+	public Rskinitialrisk( int id, String vslcode, String hazardno )
+	{
+		this.rskinitialriskPK = new RskinitialriskPK( id, vslcode, hazardno );
+	}
 
-    public void setActivity(String activity) {
-        this.activity = activity;
-    }
+	public RskinitialriskPK getRskinitialriskPK()
+	{
+		return rskinitialriskPK;
+	}
 
-    public String getHazardcode() {
-        return hazardcode;
-    }
+	public void setRskinitialriskPK( RskinitialriskPK rskinitialriskPK )
+	{
+		this.rskinitialriskPK = rskinitialriskPK;
+	}
 
-    public void setHazardcode(String hazardcode) {
-        this.hazardcode = hazardcode;
-    }
+	public String getActivity()
+	{
+		return activity;
+	}
 
-    public String getEffhazardcode() {
-        return effhazardcode;
-    }
+	public void setActivity( String activity )
+	{
+		this.activity = activity;
+	}
 
-    public void setEffhazardcode(String effhazardcode) {
-        this.effhazardcode = effhazardcode;
-    }
+	public String getHazardcode()
+	{
+		return hazardcode;
+	}
 
-    @XmlTransient
-    public List<Rskriskcontrol> getRskriskcontrolList() {
-        return rskriskcontrolList;
-    }
+	public void setHazardcode( String hazardcode )
+	{
+		this.hazardcode = hazardcode;
+	}
 
-    public void setRskriskcontrolList(List<Rskriskcontrol> rskriskcontrolList) {
-        this.rskriskcontrolList = rskriskcontrolList;
-    }
+	public String getEffhazardcode()
+	{
+		return effhazardcode;
+	}
+
+	public void setEffhazardcode( String effhazardcode )
+	{
+		this.effhazardcode = effhazardcode;
+	}
 
 	@XmlTransient
-	public List<Rskriskcontrol> getRskriskcontrolList1()
+	public List<Rskriskcontrol> getRskriskcontrolList()
 	{
-		return rskriskcontrolList1;
+		return rskriskcontrolList;
 	}
 
-	public void setRskriskcontrolList1( List<Rskriskcontrol> rskriskcontrolList1 )
+	public void setRskriskcontrolList( List<Rskriskcontrol> rskriskcontrolList )
 	{
-		this.rskriskcontrolList1 = rskriskcontrolList1;
+		this.rskriskcontrolList = rskriskcontrolList;
 	}
 
-	@XmlTransient
-	public List<Rskriskcontrol> getRskriskcontrolList2()
+	/*
+	 * @XmlTransient public List<Rskriskcontrol> getRskriskcontrolList1() { return rskriskcontrolList1; } public void setRskriskcontrolList1(
+	 * List<Rskriskcontrol> rskriskcontrolList1 ) { this.rskriskcontrolList1 = rskriskcontrolList1; }
+	 * @XmlTransient public List<Rskriskcontrol> getRskriskcontrolList2() { return rskriskcontrolList2; } public void setRskriskcontrolList2(
+	 * List<Rskriskcontrol> rskriskcontrolList2 ) { this.rskriskcontrolList2 = rskriskcontrolList2; }
+	 */
+
+	public Rskmaster getRskid()
 	{
-		return rskriskcontrolList2;
+		return rskid;
 	}
 
-	public void setRskriskcontrolList2( List<Rskriskcontrol> rskriskcontrolList2 )
+	public void setRskid( Rskmaster rskid )
 	{
-		this.rskriskcontrolList2 = rskriskcontrolList2;
+		this.rskid = rskid;
 	}
 
-    public Rskmaster getRskid() {
-        return rskid;
-    }
+	@Override
+	public int hashCode()
+	{
+		int hash = 0;
+		hash += ( rskinitialriskPK != null ? rskinitialriskPK.hashCode() : 0 );
+		return hash;
+	}
 
-    public void setRskid(Rskmaster rskid) {
-        this.rskid = rskid;
-    }
+	@Override
+	public boolean equals( Object object )
+	{
+		// TODO: Warning - this method won't work in the case the id fields are not set
+		if ( !( object instanceof Rskinitialrisk ) )
+		{
+			return false;
+		}
+		Rskinitialrisk other = ( Rskinitialrisk ) object;
+		if ( ( this.rskinitialriskPK == null && other.rskinitialriskPK != null ) || ( this.rskinitialriskPK != null && !this.rskinitialriskPK.equals( other.rskinitialriskPK ) ) )
+		{
+			return false;
+		}
+		return true;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (rskinitialriskPK != null ? rskinitialriskPK.hashCode() : 0);
-        return hash;
-    }
+	@Override
+	public String toString()
+	{
+		return "demoapp.models.Rskinitialrisk[ rskinitialriskPK=" + rskinitialriskPK + " ]";
+	}
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Rskinitialrisk)) {
-            return false;
-        }
-        Rskinitialrisk other = (Rskinitialrisk) object;
-        if ((this.rskinitialriskPK == null && other.rskinitialriskPK != null) || (this.rskinitialriskPK != null && !this.rskinitialriskPK.equals(other.rskinitialriskPK))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "demoapp.models.Rskinitialrisk[ rskinitialriskPK=" + rskinitialriskPK + " ]";
-    }
-    
 }

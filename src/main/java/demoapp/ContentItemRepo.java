@@ -43,7 +43,7 @@ public class ContentItemRepo
 		Rskinitialrisk rskInitialRisk = new Rskinitialrisk();
 		rskInitialRisk.setActivity( "Test" );
 		rskInitialRisk.setEffhazardcode( "SSS" );
-
+		rskInitialRisk.setRskid( rskMasetr );
 		RskinitialriskPK pk = new RskinitialriskPK();
 		pk.setVslcode( "ELSA" );
 		pk.setHazardno( "3" );
@@ -58,6 +58,7 @@ public class ContentItemRepo
 		pkk.setRcvslcode( "ELSA" );
 		nnn.setRskriskcontrolPK( pkk );
 
+		nnn.setRskinitialrisk( rskInitialRisk );
 		List<Rskriskcontrol> list = new ArrayList<>();
 		list.add( nnn );
 		rskInitialRisk.setRskriskcontrolList( list );
